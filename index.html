@@ -1,0 +1,117 @@
+---
+---
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
+	<link rel="stylesheet" href="/css/leaflet.css" />
+	<link rel="stylesheet" href="/css/style.css" />
+	<link rel="stylesheet" href="/css/markercluster.css" />
+	<link rel="stylesheet" href="/css/lightgallery.min.css" />
+
+	<script src="/js/leaflet.js"></script>
+	<script src="/js/leaflet.ajax.min.js"></script>
+	<script src="/js/leaflet.markercluster.js"></script>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/lightgallery.min.js"></script>
+	<script src="/js/lg-zoom.js"></script>
+</head>
+<body>
+	<div class="logo">
+		<a href="/">OldUfa</a>
+	</div>
+	<div class="wrapper">
+		<div class="gallery-header">
+			<div class="links"></div>
+			<div class="about">
+				<a href="/about.html">About</a>
+			</div>
+		</div>
+		<div id="gallery">
+			<a href="/img/kreml.jpg"><img src="/img/kreml.jpg" style="width:290px;height:228px;margin-left:5px;" /></a>
+		</div>
+	</div>
+    <div id="map"></div>
+    <script>
+    	var oldPoint;
+    	var photosData;
+    	var $lg = $('#gallery');
+        var map = L.map('map').setView([54.725710, 55.961823], 14);
+    
+
+    	L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+			subdomains: 'abcd',
+			minZoom: 1,
+			maxZoom: 17,
+			ext: 'png',
+			opacity: 0.7
+		}).addTo(map);
+
+
+		$.getJSON("/data/photos.json", function(json){
+    		photosData = json;
+		});
+
+
+		var geoPointsLayer = new L.GeoJSON.AJAX("/data/points.geojson", {
+			style: function (feature) {
+                return feature.properties;
+            },
+            onEachFeature: onEachFeature,
+              	pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, {
+                        radius: 5,
+                        fillColor: "#ff7800",
+                        color: "#000",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 1
+                    });
+                }
+            });
+
+    	function onEachFeature(feature, layer) {
+        	layer.on('click', function (e) {
+				id = feature.properties.id;
+				html = '';
+                if (typeof oldPoint != 'undefined') {
+                    oldPoint.setStyle({fillColor: "#ff7800"});
+                };
+                oldPoint = this;
+                var thisPoint = this;
+                thisPoint.setStyle({fillColor: "#00B7FF"});
+
+                $.each(photosData[id].photos, function(key, value) {
+                	html += '<a href="' + value.photoUrl + '"><img src="' + value.photoUrl + '" style="width:290px;height:228px;margin-left:5px;" /></a>';
+                })
+				$('#gallery').html(html);
+
+				$lg.data('lightGallery').destroy(true);
+				$lg.lightGallery({
+					download: false
+				});
+            });
+		}
+
+
+		var markers = new L.MarkerClusterGroup({
+    		showCoverageOnHover: false,
+    		maxClusterRadius: 80,
+		})
+
+        geoPointsLayer.on('data:loaded', function () {
+    		markers.addLayer(geoPointsLayer);
+    		map.addLayer(markers);
+		})
+
+
+        $lg.lightGallery({
+        	download: false
+        });
+    </script>
+</body>
+</html>

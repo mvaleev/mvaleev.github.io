@@ -1,0 +1,55 @@
+#map {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+.logo {
+	width: 100px;
+	height: 30px;
+	margin-top: 5px;
+	margin-left: 1%;
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 4px;
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    text-align: center;
+}
+a, a:link, a:visited, a:hover, a:active {
+	text-decoration: none;
+	color: black;
+}
+.wrapper {
+	right: 0px;
+	width: 300px;
+	height: 90%;
+	margin-top: 5px;
+	margin-right: 10px;
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 4px;
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+}
+#gallery {
+	margin-top: 50px;
+	position: static;
+}
+.gallery-header {
+	margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.links {
+	float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.about {
+	float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+}
