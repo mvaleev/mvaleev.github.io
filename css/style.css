@@ -37,15 +37,18 @@
     position: absolute;
     z-index: 1000;
     background-color: white;
-    overflow: auto;
+    overflow: hidden;
 }
 #gallery {
 	position: static;
+	overflow: auto;
+	max-height: 92%;
 }
 #gallery img{
 	width:100%;
 }
 .gallery-header {
+	height: 25px;
 }
 .link {
 	float: left;
