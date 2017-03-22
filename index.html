@@ -21,17 +21,17 @@
 </head>
 <body>
 	<div class="logo">
-		<a href="/">OldUfa</a>
+		<a href="/" class="links">Старая Уфа</a>
 	</div>
 	<div class="wrapper">
 		<div class="gallery-header">
-			<div class="links"></div>
+			<div class="link">gggg</div>
 			<div class="about">
-				<a href="/about.html">About</a>
+				<a href="/about.html" class="links">About</a>
 			</div>
 		</div>
 		<div id="gallery">
-			<a href="/img/kreml.jpg"><img src="/img/kreml.jpg" style="width:290px;height:228px;margin-left:5px;" /></a>
+			<a href="/img/kreml.jpg" class="g-link"><img src="/img/kreml.jpg"/></a>
 		</div>
 	</div>
     <div id="map"></div>
@@ -86,7 +86,7 @@
                 thisPoint.setStyle({fillColor: "#00B7FF"});
 
                 $.each(photosData[id].photos, function(key, value) {
-                	html += '<a href="' + value.photoUrl + '"><img src="' + value.photoUrl + '" style="width:290px;height:228px;margin-left:5px;" /></a>';
+                	html += '<a href="' + value.photoUrl + '" class="g-link"><img src="' + value.photoUrl + '"/></a>';
                 })
 				$('#gallery').html(html);
 
