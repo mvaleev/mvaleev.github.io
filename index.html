@@ -20,29 +20,30 @@
 	<script src="/js/lg-zoom.js"></script>
 </head>
 <body>
-	<div class="logo">
-		<a href="/" class="links">Старая Уфа</a>
-	</div>
-	<div class="wrapper">
-		<div class="gallery-header">
-			<div class="link">gggg</div>
-			<div class="about">
-				<a href="/about.html" class="links">About</a>
-			</div>
+	<div class="header">
+		<div class="main">
+			<a href="/" class="links">Старая Уфа</a>
 		</div>
+		<div class="about">
+			<a href="/about.html" class="links">О проекте</a>
+		</div>
+	</div>
+	<div class="rightpanel">	
 		<div id="gallery">
-			<a href="/img/kreml.jpg" class="g-link"><img src="/img/kreml.jpg"/></a>
+			<a href="/img/kreml.jpg" class="g-link">
+				<img src="/img/kreml.jpg" alt="Уфимский Кремль в XVII-XVIII вв.. Реконструкция." title="Уфимский Кремль в XVII-XVIII вв.. Реконструкция."/>
+			</a>
 		</div>
 	</div>
-    <div id="map"></div>
-    <script>
-    	var oldPoint;
-    	var photosData;
-    	var $lg = $('#gallery');
-        var map = L.map('map').setView([54.725710, 55.961823], 14);
-    
+	<div id="map"></div>
+	<script>
+		var oldPoint;
+		var photosData;
+		var $lg = $('#gallery');
+		var map = L.map('map').setView([54.725710, 55.961823], 14);
 
-    	L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+
+		L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
 			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 			subdomains: 'abcd',
 			minZoom: 1,
@@ -53,65 +54,89 @@
 
 
 		$.getJSON("/data/photos.json", function(json){
-    		photosData = json;
+			photosData = json;
 		});
+
+
+		function resetLightGallery() {
+			$lg.data('lightGallery').destroy(true);
+			$lg.lightGallery({
+				download: false,
+				subHtmlSelectorRelative: true,
+				loop: false
+			});
+		}
 
 
 		var geoPointsLayer = new L.GeoJSON.AJAX("/data/points.geojson", {
 			style: function (feature) {
-                return feature.properties;
-            },
-            onEachFeature: onEachFeature,
-              	pointToLayer: function (feature, latlng) {
-                    return L.circleMarker(latlng, {
-                        radius: 5,
-                        fillColor: "#ff7800",
-                        color: "#000",
-                        weight: 1,
-                        opacity: 1,
-                        fillOpacity: 1
-                    });
-                }
-            });
+				return feature.properties;
+			},
+			onEachFeature: onEachFeature,
+				pointToLayer: function (feature, latlng) {
+					return L.circleMarker(latlng, {
+						radius: 5,
+						fillColor: "#ff7800",
+						color: "#000",
+						weight: 1,
+						opacity: 1,
+						fillOpacity: 1
+					});
+				}
+			});
 
-    	function onEachFeature(feature, layer) {
-        	layer.on('click', function (e) {
+		function onEachFeature(feature, layer) {
+			layer.on('click', function (e) {
+					L.DomEvent.stopPropagation(e);
 				id = feature.properties.id;
 				html = '';
-                if (typeof oldPoint != 'undefined') {
-                    oldPoint.setStyle({fillColor: "#ff7800"});
-                };
-                oldPoint = this;
-                var thisPoint = this;
-                thisPoint.setStyle({fillColor: "#00B7FF"});
 
-                $.each(photosData[id].photos, function(key, value) {
-                	html += '<a href="' + value.photoUrl + '" class="g-link"><img src="' + value.photoUrl + '"/></a>';
-                })
+				if (typeof oldPoint != 'undefined') {
+					oldPoint.setStyle({fillColor: "#ff7800"});
+				};
+				oldPoint = this;
+
+				thisPoint = this;
+				thisPoint.setStyle({fillColor: "#00B7FF"});
+
+				$.each(photosData[id].photos, function(key, value) {
+					html += '<a href="' + value.photoUrl + '" class="g-link"><img src="' + value.photoUrl + '"  alt="' + value.photoTitle + '"  title="' + value.photoTitle + '"/></a>';
+				})
 				$('#gallery').html(html);
 
-				$lg.data('lightGallery').destroy(true);
-				$lg.lightGallery({
-					download: false
-				});
-            });
+				resetLightGallery();
+			});
 		}
 
 
 		var markers = new L.MarkerClusterGroup({
-    		showCoverageOnHover: false,
-    		maxClusterRadius: 80,
+			showCoverageOnHover: false,
+			maxClusterRadius: 80,
 		})
 
-        geoPointsLayer.on('data:loaded', function () {
-    		markers.addLayer(geoPointsLayer);
-    		map.addLayer(markers);
+		geoPointsLayer.on('data:loaded', function () {
+			markers.addLayer(geoPointsLayer);
+			map.addLayer(markers);
 		})
 
 
-        $lg.lightGallery({
-        	download: false
-        });
-    </script>
+		$lg.lightGallery({
+			download: false,
+			subHtmlSelectorRelative: true,
+			loop: false
+		});
+
+
+		map.on('click',function(){
+			if (typeof oldPoint != 'undefined') {
+				if (oldPoint.options.fillColor == '#00B7FF') {
+					oldPoint.setStyle({fillColor: "#ff7800"});
+					html = '<a href="/img/kreml.jpg" class="g-link"><img src="/img/kreml.jpg" alt="Уфимский Кремль в XVII-XVIII вв.. Реконструкция." title="Уфимский Кремль в XVII-XVIII вв.. Реконструкция."/></a>';
+					$('#gallery').html(html);
+					resetLightGallery();
+				}
+			};
+		});
+	</script>
 </body>
 </html>
