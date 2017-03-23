@@ -12,12 +12,12 @@
 	<link rel="stylesheet" href="/css/markercluster.css" />
 	<link rel="stylesheet" href="/css/lightgallery.min.css" />
 
-	<script src="/js/leaflet.js"></script>
-	<script src="/js/leaflet.ajax.min.js"></script>
-	<script src="/js/leaflet.markercluster.js"></script>
-	<script src="/js/jquery.min.js"></script>
-	<script src="/js/lightgallery.min.js"></script>
-	<script src="/js/lg-zoom.js"></script>
+	<script type="text/javascript" src="/js/leaflet.js"></script>
+	<script type="text/javascript" src="/js/leaflet.ajax.min.js"></script>
+	<script type="text/javascript" src="/js/leaflet.markercluster.js"></script>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/lightgallery.min.js"></script>
+	<script type="text/javascript" src="/js/lg-zoom.js"></script>
 </head>
 <body>
 	<div class="header">
@@ -97,7 +97,7 @@
 				thisPoint = this;
 				thisPoint.setStyle({fillColor: "#00B7FF"});
 
-				$.each(photosData[id].photos, function(key, value) {
+				$.each(photosData[id], function(key, value) {
 					html += '<a href="' + value.photoUrl + '" class="g-link"><img src="' + value.photoUrl + '"  alt="' + value.photoTitle + '"  title="' + value.photoTitle + '"/></a>';
 				})
 				$('#gallery').html(html);

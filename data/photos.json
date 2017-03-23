@@ -1,22 +1,24 @@
 {
-  "1": {
-    "photos": [
-      {
-        "photoUrl": "https://cs541601.userapi.com/c636624/v636624822/4e37b/M2qVeiPPOC8.jpg",
-        "photoTitle": "one"
-      }
+  "1": [
+    {
+      "id": "gf4q3",
+      "photoUrl": "https://cs541601.userapi.com/c636624/v636624822/4e37b/M2qVeiPPOC8.jpg",
+      "photoTitle": "one",
+      "photoYear": ""
+    }
+  ],
+  "2": [
+    {
+      "id": "3we77",
+      "photoUrl": "https://pp.userapi.com/c836133/v836133819/2329d/eYY8FV_PBkA.jpg",
+      "photoTitle": "two",
+      "photoYear": ""
+    },
+    {
+      "id": "lf0qt",
+      "photoUrl": "https://pp.userapi.com/c626631/v626631587/27fea/6vIzpzf9dMc.jpg",
+      "photoTitle": "three",
+      "photoYear": ""
+    }
     ]
-  },
-  "2": {
-    "photos": [
-      {
-        "photoUrl": "https://pp.userapi.com/c836133/v836133819/2329d/eYY8FV_PBkA.jpg",
-        "photoTitle": "two"
-      },
-      {
-        "photoUrl": "https://pp.userapi.com/c626631/v626631587/27fea/6vIzpzf9dMc.jpg",
-        "photoTitle": "three"
-      }
-    ]
-  }
 }
