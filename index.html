@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
     <link rel="stylesheet" href="/css/leaflet.css" />
+    <link rel="stylesheet" href="/css/L.Control.Basemaps.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/markercluster.css" />
     <link rel="stylesheet" href="/css/lightgallery.min.css" />
@@ -15,6 +16,7 @@
     <script type="text/javascript" src="/js/leaflet.js"></script>
     <script type="text/javascript" src="/js/leaflet.ajax.min.js"></script>
     <script type="text/javascript" src="/js/leaflet.markercluster.js"></script>
+    <script type="text/javascript" src="/js/L.Control.Basemaps.js"></script>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/lightgallery.min.js"></script>
     <script type="text/javascript" src="/js/lg-zoom.js"></script>
@@ -47,15 +49,29 @@
         var map = L.map('map').setView([54.725710, 55.961823], 14);
 
 
-        L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            subdomains: 'abcd',
-            minZoom: 1,
-            maxZoom: 17,
-            ext: 'png',
-            opacity: 0.7
-        }).addTo(map);
-
+        var basemaps = [
+            L.tileLayer('//stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png', {
+                attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+                subdomains: 'abcd',
+                maxZoom: 18,
+                minZoom: 1,
+                label: 'Watercolor'
+            }),
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                subdomains: 'abc',
+                maxZoom: 18,
+                minZoom: 1,
+                label: 'OSM'
+            }),
+            L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                subdomains: 'abcd',
+                maxZoom: 18,
+                minZoom: 1,
+                label: 'Esri WorldImagery'
+            })
+        ];
 
         $.getJSON("/data/photos.json", function(json){
             photosData = json;
@@ -119,7 +135,15 @@
         geoPointsLayer.on('data:loaded', function () {
             markers.addLayer(geoPointsLayer);
             map.addLayer(markers);
-        })
+            
+        });
+
+        map.addControl(L.control.basemaps({
+            basemaps: basemaps,
+            tileX: 0,
+            tileY: 0,
+            tileZ: 1
+        }));
 
 
         $lg.lightGallery({
