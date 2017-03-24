@@ -3,217 +3,228 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
-	<link rel="stylesheet" href="/css/leaflet.css" />
-	<link rel="stylesheet" href="/css/astyle.css" />
-	<link rel="stylesheet" href="/css/tabulator.css" />
+    <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
+    <link rel="stylesheet" href="/css/leaflet.css" />
+    <link rel="stylesheet" href="/css/astyle.css" />
+    <link rel="stylesheet" href="/css/tabulator.css" />
 
-	<script type="text/javascript" src="/js/leaflet.js"></script>
-	<script type="text/javascript" src="/js/jquery.min.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/leaflet.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/js/tabulator.js"></script>
 
 
 </head>
 <body>
-	<div class="header">
-		<div class="main">
-			<button onclick="enableAddMarker();return false;">Add Point</button>
-		</div>
-		<div class="sPoints">
-			<button onclick="sPoints();return false;" id="sPoints">Save Points</button>
-		</div>
-		<div class="sPhotos">
-			<button onclick="sPhotos();return false;" id="sPhotos">Save Photos</button>
-		</div>
-	</div>
-	<div class="rightpanel">
-		<div class="save-photo-data">
-			<button onclick="addNewRow();return false;">Добавить строку</button>
-		</div>
-		<div class="save-photo-data">
-			<button onclick="savePhotoData();return false;" id="sButton" value="">Сохранить данные</button>
-		</div>
-		<div id="edit-table">
-	</div>
-	</div>
-	<div id="map"></div>
-	<script>
-		var photosData;
-		pointsData = '';
-		var textFile = null;
+    <div class="header">
+        <div class="main">
+            <button onclick="enableAddMarker();return false;">Add Point</button>
+        </div>
+        <div class="sPoints">
+            <button onclick="sPoints();return false;" id="sPoints">Save Points</button>
+        </div>
+        <div class="sPhotos">
+            <button onclick="sPhotos();return false;" id="sPhotos">Save Photos</button>
+        </div>
+    </div>
+    <div class="rightpanel">
+        <div class="save-photo-data">
+            <button onclick="addNewRow();return false;">Добавить строку</button>
+        </div>
+        <div class="save-photo-data">
+            <button onclick="savePhotoData();return false;" id="sButton" value="">Сохранить данные</button>
+        </div>
+        <div id="edit-table">
+    </div>
+    </div>
+    <div id="map"></div>
+    <script>
+        var photosData;
+        pointsData = '';
+        var textFile = null;
 
-		var map = L.map('map').setView([54.725710, 55.961823], 14);
+        var map = L.map('map').setView([54.725710, 55.961823], 14);
 
-		L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-			subdomains: 'abcd',
-			minZoom: 1,
-			maxZoom: 17,
-			ext: 'png',
-			opacity: 0.7
-		}).addTo(map);
-
-
-		$("#edit-table").tabulator({
-			height:"90%",
-			fitColumns:true,
-			tooltips:true,
-			columns:[
-				{title:"photoUrl", field:"photoUrl", editable:true},
-				{title:"photoTitle", field:"photoTitle", editable:true},
-				{title:"photoYear", field:"photoYear", editable:true},
-			],
-		});
+        L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: 'abcd',
+            minZoom: 1,
+            maxZoom: 17,
+            ext: 'png',
+            opacity: 0.7
+        }).addTo(map);
 
 
-		$.getJSON("/data/photos.json", function(json){
-			photosData = json;
-			delete json;
-		});
-
-		$.getJSON("/data/points.geojson", function(json){
-			initPoints(json);
-			delete json;
-		});
-
-
-		function initPoints(data) {
-			pointsData = new L.GeoJSON(data, {
-				style: function (feature) {
-					return feature.properties;
-				},
-				onEachFeature: onEachFeature,
-					pointToLayer: function (feature, latlng) {
-						return L.circleMarker(latlng, {
-							radius: 5,
-							fillColor: "#ff7800",
-							color: "#000",
-							weight: 1,
-							opacity: 1,
-							fillOpacity: 1
-						});
-					}
-				});
-			pointsData.addTo(map);
-		}
-
-		function onEachFeature(feature, layer) {
-			layer.on('click', function (e) {
-				L.DomEvent.stopPropagation(e);
-				idGeo = feature.properties.id;
-
-				if (typeof oldPoint != 'undefined') {
-					oldPoint.setStyle({fillColor: "#ff7800"});
-				};
-				oldPoint = this;
-
-				thisPoint = this;
-				thisPoint.setStyle({fillColor: "#00B7FF"});
-
-				document.getElementById("sButton").value = idGeo;
-
-				$("#edit-table").tabulator("setData", JSON.stringify(photosData[idGeo]));
-				$(window).resize(function(){
-					$("#edit-table").tabulator("redraw");
-				});
-			});
-		}
+        $("#edit-table").tabulator({
+            height:"90%",
+            fitColumns:true,
+            tooltips:true,
+            columns:[
+                {title:"photoUrl", field:"photoUrl", editable:true},
+                {title:"photoTitle", field:"photoTitle", editable:true},
+                {title:"photoYear", field:"photoYear", editable:true},
+            ],
+        });
 
 
-		function randomString(length) {
-			var mask = 'abcdefghijklmnopqrstuvwxyz0123456789';
-			var result = '';
-			for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
-				return result;
-		}
+        $.getJSON("/data/photos.json", function(json){
+            photosData = json;
+            delete json;
+        });
+
+        $.getJSON("/data/points.geojson", function(json){
+            initPoints(json);
+            delete json;
+        });
 
 
-		function enableAddMarker() {
-			document.getElementById('map').style.cursor = "crosshair";
-			map.on('click', addPoint);
-		}
+        function initPoints(data) {
+            pointsData = new L.GeoJSON(data, {
+                style: function (feature) {
+                    return feature.properties;
+                },
+                onEachFeature: onEachFeature,
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, {
+                            radius: 5,
+                            fillColor: "#ff7800",
+                            color: "#000",
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 1
+                        });
+                    }
+                });
+            pointsData.addTo(map);
+        }
 
-		function addPoint(e) {
-			idGeo = randomString(10);
-			var newPoint = {
-				"type": "Feature",
-				"properties": {"id": idGeo},
-				"geometry": {
-					"type": "Point",
-					"coordinates": [e.latlng.lng, e.latlng.lat]
-				}
-			};
+        function onEachFeature(feature, layer) {
+            layer.on('click', function (e) {
+                L.DomEvent.stopPropagation(e);
+                idGeo = feature.properties.id;
 
-			map.removeLayer(pointsData);
-			pointsData.addData(newPoint);
+                if (typeof oldPoint != 'undefined') {
+                    oldPoint.setStyle({fillColor: "#ff7800"});
+                };
+                oldPoint = this;
 
-			initPoints(pointsData.toGeoJSON());
+                thisPoint = this;
+                thisPoint.setStyle({fillColor: "#00B7FF"});
 
-			photosData[idGeo] = [];
+                document.getElementById("sButton").value = idGeo;
 
-			map.off('click', addPoint);
-			document.getElementById('map').style.cursor = '';
-			delete idGeo;
-		}
-
-
-		function makeTextFile(text) {
-			var data = new Blob([text], {type: 'text/plain'});
-			if (textFile !== null) {
-				window.URL.revokeObjectURL(textFile);
-			}
-			textFile = window.URL.createObjectURL(data);
-			return textFile;
-		};
-
-		function createFile(text, fileName) {
-			var link = document.createElement('a');
-			link.setAttribute('download', fileName);
-			link.href = makeTextFile(text);
-			document.body.appendChild(link);
-
-			window.requestAnimationFrame(function () {
-				var event = new MouseEvent('click');
-				link.dispatchEvent(event);
-				document.body.removeChild(link);
-			});
-		}
-
-		function sPoints() {
-			createFile(JSON.stringify(pointsData.toGeoJSON()), 'points.geojson');			
-		}
-
-		function sPhotos() {
-			createFile(JSON.stringify(photosData), 'photos.json');
-		}
+                $("#edit-table").tabulator("setData", JSON.stringify(photosData[idGeo]));
+                $(window).resize(function(){
+                    $("#edit-table").tabulator("redraw");
+                });
+            });
+        }
 
 
-		function addNewRow() {
-			idGeo = document.getElementById("sButton").value;
-			if (idGeo != "") {
-				idRow = randomString(5);
-				$("#edit-table").tabulator("addRow", {"id": idRow,"photoUrl":"","photoTitle":"","photoYear":""});
-			}
-			delete idGeo;
-			delete idRow;
-		}
+        function randomString(length) {
+            var mask = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            var result = '';
+            for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
+                return result;
+        }
 
-		function savePhotoData() {
-			idGeo = document.getElementById("sButton").value;
-			if (idGeo != "") {
-				data = $("#edit-table").tabulator("getData");
-				photosData[idGeo] = data;
-				delete data;
-				document.getElementById("sButton").value = '';
-				$("#edit-table").tabulator("clear");
-			}
-			delete idGeo;
-		}
 
-	</script>
+        function enableAddMarker() {
+            document.getElementById('map').style.cursor = "crosshair";
+            map.on('click', addPoint);
+        }
+
+        function addPoint(e) {
+            idGeo = randomString(10);
+            var newPoint = {
+                "type": "Feature",
+                "properties": {"id": idGeo},
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [e.latlng.lng, e.latlng.lat]
+                }
+            };
+
+            map.removeLayer(pointsData);
+            pointsData.addData(newPoint);
+
+            initPoints(pointsData.toGeoJSON());
+
+            photosData[idGeo] = [];
+
+            map.off('click', addPoint);
+            document.getElementById('map').style.cursor = '';
+            delete idGeo;
+        }
+
+
+        function makeTextFile(text) {
+            var data = new Blob([text], {type: 'text/plain'});
+            if (textFile !== null) {
+                window.URL.revokeObjectURL(textFile);
+            }
+            textFile = window.URL.createObjectURL(data);
+            return textFile;
+        };
+
+        function createFile(text, fileName) {
+            var link = document.createElement('a');
+            link.setAttribute('download', fileName);
+            link.href = makeTextFile(text);
+            document.body.appendChild(link);
+
+            window.requestAnimationFrame(function () {
+                var event = new MouseEvent('click');
+                link.dispatchEvent(event);
+                document.body.removeChild(link);
+            });
+        }
+
+        function sPoints() {
+            createFile(JSON.stringify(pointsData.toGeoJSON()), 'points.geojson');           
+        }
+
+        function sPhotos() {
+            createFile(JSON.stringify(photosData), 'photos.json');
+        }
+
+
+        function addNewRow() {
+            idGeo = document.getElementById("sButton").value;
+            if (idGeo != "") {
+                idRow = randomString(5);
+                $("#edit-table").tabulator("addRow", {"id": idRow,"photoUrl":"","photoTitle":"","photoYear":""});
+            }
+            delete idGeo;
+            delete idRow;
+        }
+
+        function savePhotoData() {
+            idGeo = document.getElementById("sButton").value;
+            if (idGeo != "") {
+                data = $("#edit-table").tabulator("getData");
+                photosData[idGeo] = data;
+                delete data;
+                document.getElementById("sButton").value = '';
+                $("#edit-table").tabulator("clear");
+            }
+            delete idGeo;
+        }
+
+
+        map.on('click',function(){
+            if (typeof oldPoint != 'undefined') {
+                if (oldPoint.options.fillColor == '#00B7FF') {
+                    oldPoint.setStyle({fillColor: "#ff7800"});
+                    document.getElementById("sButton").value = '';
+                    $("#edit-table").tabulator("clear");
+                }
+            };
+        });
+
+    </script>
 </body>
 </html>

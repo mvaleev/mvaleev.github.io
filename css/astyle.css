@@ -1,77 +1,74 @@
 body {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 #map {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 .header {
-	margin-top: 8px;
-	display: table;
-	width: 300px;
-	height: 30px;
-	left: 1%;
-	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
-	border-radius: 4px;
-	position: absolute;
-	z-index: 1000;
-	background-color: white;
-	text-align: center;
+    margin-top: 8px;
+    display: table;
+    width: 300px;
+    height: 30px;
+    left: 1%;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 4px;
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    text-align: center;
 }
 .main {
-	display: table-cell;
-	vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
 }
 .sPoints {
-	display: table-cell;
-	vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
 }
 .sPhotos {
-	display: table-cell;
-	vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .rightpanel {
-	right: 0;
-	width: 50%;
-	height: 100%;
-	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
-	position: absolute;
-	z-index: 1000;
-	background: rgba(60,58,55,0.45);
+    right: 0;
+    width: 50%;
+    height: 100%;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    position: absolute;
+    z-index: 1000;
+    background: rgba(60,58,55,0.45);
 }
 #gallery {
-	overflow: auto;
-	max-height: 95%;
+    overflow: auto;
+    max-height: 95%;
 }
 .g-link {
-	display: block;
-	margin-right: 6px;
-	margin-left: 6px;
-	margin-top: 6px;
-	border: 5px solid rgba(255, 255, 255, 0.67);
+    display: block;
+    margin-right: 6px;
+    margin-left: 6px;
+    margin-top: 6px;
+    border: 5px solid rgba(255, 255, 255, 0.67);
 }
 #gallery img {
-	width: 100%;
-	margin-bottom: -4px;
+    width: 100%;
+    margin-bottom: -4px;
 }
-
 
 #edit-table {
-	width:100%;
-	font-family:sans-serif;
+    width:100%;
+    font-family:sans-serif;
 }
 .save-photo-data {
-	width:100%;
+    width:100%;
 }
 button {
-	width:100%;
+    width:100%;
 }
-
-
