@@ -27,10 +27,10 @@
 </head>
 <body>
     <div class="header">
-        <div class="main">
+        <div class="table-cell">
             <a href="/" class="links">Старая Уфа</a>
         </div>
-        <div class="about">
+        <div class="table-cell">
             <a href="/about.html" rel="modal:open" class="links">О проекте</a>
         </div>
     </div>
@@ -39,6 +39,11 @@
             <a href="/img/kreml.jpg" class="g-link">
                 <img src="/img/kreml.jpg" alt="Уфимский Кремль в XVII-XVIII вв.. Реконструкция." title="Уфимский Кремль в XVII-XVIII вв.. Реконструкция."/>
             </a>
+        </div>
+    </div>
+    <div class="feedback">
+        <div class="table-cell">
+            <a href="/feedback.html" rel="modal:open" class="links">FeedBack</a>
         </div>
     </div>
     <div id="map"></div>
@@ -118,7 +123,7 @@
                 thisPoint.setStyle({fillColor: "#00B7FF"});
 
                 $.each(photosData[id], function(key, value) {
-                    html += '<a href="' + value.photoUrl + '" class="g-link"><img src="' + value.photoUrl + '"  alt="' + value.photoTitle + '"  title="' + value.photoTitle + '"/></a>';
+                    html += '<a href="' + value.photoUrl + '" class="g-link"><img src="' + value.photoUrl + '"  alt="' + value.photoTitle + '<br>' + value.photoYear + ' г."  title="' + value.photoTitle + '"/></a>';
                 })
                 $('#gallery').html(html);
 

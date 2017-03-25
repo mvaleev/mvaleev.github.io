@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
     <link rel="stylesheet" href="/css/leaflet.css" />
-    <link rel="stylesheet" href="/css/astyle.css" />
+    <link rel="stylesheet" href="/css/editor.css" />
     <link rel="stylesheet" href="/css/tabulator.css" />
 
     <script type="text/javascript" src="/js/leaflet.js"></script>
@@ -48,13 +48,11 @@
 
         var map = L.map('map').setView([54.725710, 55.961823], 14);
 
-        L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
             subdomains: 'abcd',
+            maxZoom: 18,
             minZoom: 1,
-            maxZoom: 17,
-            ext: 'png',
-            opacity: 0.7
         }).addTo(map);
 
 
