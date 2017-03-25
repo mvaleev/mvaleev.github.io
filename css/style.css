@@ -73,6 +73,9 @@ body {
     text-align: center;
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     background: rgb(241, 239, 232);
+    -webkit-writing-mode: vertical-lr;
+    -moz-writing-mode: vertical-lr;
+    -ms-writing-mode: vertical-lr;
     writing-mode: vertical-lr;
 }
 
