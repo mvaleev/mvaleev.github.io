@@ -18,13 +18,11 @@
     <link rel="stylesheet" type="text/css" href="/css/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="/css/L.Control.Basemaps.css" />
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="/css/markercluster.css" />
     <link rel="stylesheet" type="text/css" href="/css/lightgallery.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/jquery.modal.css" media="screen" />
 
     <script type="text/javascript" src="/js/leaflet.js"></script>
     <script type="text/javascript" src="/js/leaflet.ajax.min.js"></script>
-    <script type="text/javascript" src="/js/leaflet.markercluster.js"></script>
     <script type="text/javascript" src="/js/L.Control.Basemaps.js"></script>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/lightgallery.min.js"></script>
@@ -140,24 +138,14 @@
         }
 
 
-        var markers = new L.MarkerClusterGroup({
-            showCoverageOnHover: false,
-            maxClusterRadius: 80,
-        })
-
-        geoPointsLayer.on('data:loaded', function () {
-            markers.addLayer(geoPointsLayer);
-            map.addLayer(markers);
-            
-        });
-
         map.addControl(L.control.basemaps({
             basemaps: basemaps,
             tileX: 0,
             tileY: 0,
             tileZ: 1
         }));
-        //map.addLayer(geoPointsLayer);
+        map.addLayer(geoPointsLayer);
+
 
         $lg.lightGallery({
             download: false
