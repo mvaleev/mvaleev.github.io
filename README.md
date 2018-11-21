@@ -15,3 +15,4 @@ photos.json - all photo for gallery
 
 points.properties.id = photos.id
 ```
+
